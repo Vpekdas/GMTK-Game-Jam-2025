@@ -12,18 +12,10 @@ public class PlayerController : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
     }
 
-    private void Start()
-    {
-        Cursor.lockState = CursorLockMode.Locked;
-    }
 
     private void Update()
     {
         _input = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-        if (Input.GetKey(KeyCode.Space))
-        {
-            Cursor.lockState = CursorLockMode.None;
-        }
     }
 
     private void FixedUpdate()
