@@ -38,6 +38,7 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 camForward = _camera.transform.forward;
         Vector3 camRight = _camera.transform.right;
+        // Y = 0 ensure that we are not moving slower if we look above or below.
         camForward.y = 0;
         camRight.y = 0;
         camForward.Normalize();
