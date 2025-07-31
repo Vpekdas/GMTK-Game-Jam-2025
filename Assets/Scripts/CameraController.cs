@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class CameraController : MonoBehaviour
 {
@@ -11,27 +12,33 @@ public class CameraController : MonoBehaviour
 
     private void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
     }
 
-    private void Update()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-        }
-        if (Input.GetKey(KeyCode.Escape))
-        {
-            Cursor.lockState = CursorLockMode.None;
-        }
-    }
     private void LateUpdate()
     {
         if (Cursor.lockState == CursorLockMode.Locked)
         {
-            _yaw += _speedH * Input.GetAxis("Mouse X");
-            _pitch -= _speedV * Input.GetAxis("Mouse Y");
             transform.eulerAngles = new Vector3(_pitch, _yaw, 0.0f);
         }
+    }
+
+    public void MouseInput(InputAction.CallbackContext context)
+    {
+        if (Cursor.lockState == CursorLockMode.Locked)
+        {
+            Vector2 value = context.ReadValue<Vector2>();
+            _yaw += _speedH * value.x * 0.1f;
+            _pitch -= _speedV * value.y * 0.1f;
+        }
+    }
+
+    public void LockMouse(InputAction.CallbackContext context)
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    public void UnlockMouse(InputAction.CallbackContext context)
+    {
+        Cursor.lockState = CursorLockMode.None;
     }
 }

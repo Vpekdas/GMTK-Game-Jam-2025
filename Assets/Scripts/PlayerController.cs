@@ -1,21 +1,22 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private float _speed = 5f;
+    [SerializeField] private float _speed = 12.0f;
     [SerializeField] private Camera _camera;
     private Rigidbody _rb;
-    private Vector3 _input;
+    private PlayerInput _playerInput;
+    private Vector2 _input;
 
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
+        _playerInput = GetComponent<PlayerInput>();
     }
-
 
     private void Update()
     {
-        _input = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
     }
 
     private void FixedUpdate()
@@ -27,7 +28,12 @@ public class PlayerController : MonoBehaviour
         camForward.Normalize();
         camRight.Normalize();
 
-        Vector3 moveDirection = camForward * _input.z + camRight * _input.x;
-        _rb.linearVelocity = moveDirection * _speed + new Vector3(0, _rb.linearVelocity.y, 0);
+        Vector3 moveDirection = camForward * _input.y + camRight * _input.x;
+        _rb.linearVelocity = moveDirection.normalized * _speed + new Vector3(0, _rb.linearVelocity.y, 0);
+    }
+
+    public void MoveInput(InputAction.CallbackContext context)
+    {
+        _input = context.ReadValue<Vector2>();
     }
 }
