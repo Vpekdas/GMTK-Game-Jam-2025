@@ -97,12 +97,12 @@
                 },
                 {
                     "name": "Click",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "2314de63-471c-4344-b2e1-3c3653f6415d",
-                    "expectedControlType": "",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [

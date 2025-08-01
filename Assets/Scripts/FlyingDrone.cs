@@ -50,7 +50,7 @@ public class FlyingDrone : MonoBehaviour
             Vector3 toPlayer = target.position - transform.position;
             toPlayer.Normalize();
 
-            rb.AddForce(toPlayer * 8.0f, ForceMode.Force);
+            rb.AddForce(toPlayer * 12.0f, ForceMode.Force);
             rb.excludeLayers |= 1 << LayerMask.NameToLayer("Enemy");
             b.SetTrailColor(Color.yellowNice);
 

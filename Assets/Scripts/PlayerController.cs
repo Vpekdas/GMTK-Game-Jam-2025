@@ -22,6 +22,9 @@ public class PlayerController : MonoBehaviour
     private Vector2 _input;
     private float _yaw = 0.0f;
     private float _pitch = 0.0f;
+    private float _time;
+    private float _lastBulletTime;
+    private float _bulletCooldown = 0.4f;
 
     private void Awake()
     {
@@ -36,6 +39,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        _time += Time.deltaTime;
     }
 
     private void FixedUpdate()
@@ -114,11 +118,23 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
+        if (_time - _lastBulletTime < _bulletCooldown)
+        {
+            return;
+        }
+
+        if (!context.performed)
+        {
+            return;
+        }
+
+        _lastBulletTime = _time;
+
         GameObject bullet = Instantiate(_bullet, _pistol.transform.position, Quaternion.identity);
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
         Bullet b = bullet.GetComponent<Bullet>();
 
-        rb.AddForce(_head.transform.forward * 8.0f, ForceMode.Force);
+        rb.AddForce(_head.transform.forward * 12.0f, ForceMode.Force);
         rb.excludeLayers |= 1 << LayerMask.NameToLayer("Player");
         b.SetTrailColor(Color.white);
 
