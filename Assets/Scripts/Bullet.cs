@@ -2,18 +2,36 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
     void Start()
     {
     }
 
-    // Update is called once per frame
     void Update()
     {
     }
 
     void OnCollisionEnter(Collision collision)
     {
+        if ( collision.collider.TryGetComponent(out Mortal mortal))
+        {
+            mortal.Damage(20.0f);
+        }
+        else if (collision.collider.TryGetComponent(out Barrel barrel))
+        {
+            barrel.Explode();
+        }
+        else if (collision.collider.TryGetComponent(out PlayerController player))
+        {
+            player.Kill();
+        }
+
         Destroy(gameObject);
+    }
+
+    public void SetTrailColor(Color color)
+    {
+        TrailRenderer trailRenderer = GetComponent<TrailRenderer>();
+        trailRenderer.startColor = trailRenderer.endColor = color;
     }
 }

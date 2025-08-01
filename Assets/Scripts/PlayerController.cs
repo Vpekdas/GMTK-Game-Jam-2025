@@ -1,9 +1,12 @@
-using System;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    public static UnityEvent explosionEvent = new();
+
     [SerializeField] private float _speed = 7.0f;
     [SerializeField] private float _lookSpeedH = 3.0f;
     [SerializeField] private float _lookSpeedV = 3.0f;
@@ -11,6 +14,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform _head;
     [SerializeField] private GameObject _bullet;
     [SerializeField] private Transform _pistol;
+
+    [SerializeField] private float _explosionShakeTime = 0.2f;
+    [SerializeField] private AnimationCurve _explosionShakeCurve;
 
     private Rigidbody _rb;
     private Vector2 _input;
@@ -20,6 +26,8 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
+
+        explosionEvent.AddListener(ShakeScreen);
     }
 
     private void Update()
@@ -46,6 +54,32 @@ public class PlayerController : MonoBehaviour
             _head.localEulerAngles = new Vector3(_pitch, _head.localEulerAngles.y, 0.0f);
             transform.eulerAngles = new Vector3(transform.eulerAngles.x, _yaw, 0.0f);
         }
+    }
+
+    public void Kill()
+    {
+        // Debug.Log("Player is ded :(");
+    }
+
+    public void ShakeScreen()
+    {
+        StartCoroutine(ShakeShakeShake());
+    }
+
+    private IEnumerator ShakeShakeShake()
+    {
+        Vector3 startPosition = transform.position;
+        float elaspedTime = 0.0f;
+
+        while (elaspedTime < _explosionShakeTime)
+        {
+            elaspedTime += Time.deltaTime;
+            float strength = _explosionShakeCurve.Evaluate(elaspedTime / _explosionShakeTime);
+            transform.position = startPosition + Random.insideUnitSphere * strength;
+            yield return null;
+        }
+
+        transform.position = startPosition;
     }
 
     public void MoveInput(InputAction.CallbackContext context)
@@ -76,7 +110,12 @@ public class PlayerController : MonoBehaviour
         }
 
         GameObject bullet = Instantiate(_bullet, _pistol.transform.position, Quaternion.identity);
-        bullet.GetComponent<Rigidbody>().AddForce(_head.transform.forward * 8.0f, ForceMode.Force);
+        Rigidbody rb = bullet.GetComponent<Rigidbody>();
+        Bullet b = bullet.GetComponent<Bullet>();
+
+        rb.AddForce(_head.transform.forward * 8.0f, ForceMode.Force);
+        rb.excludeLayers |= 1 << LayerMask.NameToLayer("Player");
+        b.SetTrailColor(Color.white);
     }
 
     public void UnlockMouse(InputAction.CallbackContext context)
