@@ -30,6 +30,10 @@ public class PlayerController : MonoBehaviour
         explosionEvent.AddListener(ShakeScreen);
     }
 
+    private void Start()
+    {
+    }
+
     private void Update()
     {
     }
@@ -117,6 +121,8 @@ public class PlayerController : MonoBehaviour
         rb.AddForce(_head.transform.forward * 8.0f, ForceMode.Force);
         rb.excludeLayers |= 1 << LayerMask.NameToLayer("Player");
         b.SetTrailColor(Color.white);
+
+        _pistol.GetComponent<AudioSource>().Play();
     }
 
     public void UnlockMouse(InputAction.CallbackContext context)

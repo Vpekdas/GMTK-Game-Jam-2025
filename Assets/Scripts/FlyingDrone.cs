@@ -4,8 +4,10 @@ public class FlyingDrone : MonoBehaviour
 {
     [SerializeField] private float _cooldownTime = 0.5f;
     [SerializeField] private GameObject _bullet;
-    [SerializeField] private ParticleSystem _particleSystem;
-    [SerializeField] private Rigidbody _rb;
+    private ParticleSystem _particleSystem;
+    private Rigidbody _rb;
+    private AudioSource _explosionAudioSource;
+    private AudioSource _gunAudioSource;
 
     public Transform target;
 
@@ -18,6 +20,11 @@ public class FlyingDrone : MonoBehaviour
     {
         _mortal = GetComponent<Mortal>();
         _rb = GetComponent<Rigidbody>();
+
+        AudioSource[] sources = GetComponents<AudioSource>();
+
+        _explosionAudioSource = sources[0];
+        _gunAudioSource = sources[1];
 
         _mortal.death.AddListener(OnDeath);
     }
@@ -35,6 +42,8 @@ public class FlyingDrone : MonoBehaviour
             GameObject bullet = Instantiate(_bullet, transform.position + transform.forward * 0.4f, Quaternion.identity);
             Rigidbody rb = bullet.GetComponent<Rigidbody>();
             Bullet b = bullet.GetComponent<Bullet>();
+
+            _gunAudioSource.Play();
 
             // TODO: Rotate the turret & drone toward the player.
             //       The gun first then the drone lag behind a bit.
@@ -60,6 +69,8 @@ public class FlyingDrone : MonoBehaviour
         _isDestroyed = true;
         _rb.useGravity = false;
         _rb.detectCollisions = false;
+
+        _explosionAudioSource.Play();
 
         PlayerController.explosionEvent.Invoke();
 

@@ -3,7 +3,13 @@ using UnityEngine;
 public class Barrel : MonoBehaviour
 {
     [SerializeField] private ParticleSystem _particleSystem;
+    [SerializeField] private AudioSource _audioSource;
     private bool _isDestroyed;
+
+    void Awake()
+    {
+        _audioSource = GetComponent<AudioSource>();
+    }
 
     void Start()
     {
@@ -26,6 +32,8 @@ public class Barrel : MonoBehaviour
 
         _particleSystem.Play();
         _isDestroyed = true;
+
+        _audioSource.Play();
 
         foreach (Transform t in transform)
         {
