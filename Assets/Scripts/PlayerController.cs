@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
     private float _lastBulletTime;
     private float _bulletCooldown = 0.4f;
     private readonly int _roomLength = 30, _wallHeight = 16;
+    private bool _isGrounded;
 
 
     private void Awake()
@@ -34,6 +35,7 @@ public class PlayerController : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
 
         explosionEvent.AddListener(ShakeScreen);
+        _isGrounded = true;
     }
 
     private void Start()
@@ -157,10 +159,11 @@ public class PlayerController : MonoBehaviour
 
     public void Jump(InputAction.CallbackContext context)
     {
-        if (!context.performed)
+        if (!context.performed || !_isGrounded)
             return;
 
         _rb.AddForce(transform.up * 6.0f, ForceMode.Impulse);
+        _isGrounded = false;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -205,6 +208,14 @@ public class PlayerController : MonoBehaviour
             enemy.GetComponent<FlyingDrone>().Target = transform;
 
 
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            _isGrounded = true;
         }
     }
 }
