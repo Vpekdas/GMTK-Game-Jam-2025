@@ -10,11 +10,11 @@ public class Laser : MonoBehaviour
         _isMovingHorizontal = false;
         _isMovingVertical = false;
         _revertDirection = false;
-        if (Random.Range(0, 100) <= 30)
+        if (Random.Range(0, 100) <= 40)
         {
             _isMovingHorizontal = true;
         }
-        else if (Random.Range(0, 100) <= 60)
+        else if (Random.Range(0, 100) <= 80)
         {
             _isMovingVertical = true;
         }
