@@ -164,10 +164,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (other.CompareTag("Laser"))
         {
-            Transform room = other.gameObject.transform.parent;
-            char roomNumber = room.name[^1];
-            GameObject actualRoom = GameObject.Find("Room" + roomNumber);
-            SpawnEnemy(actualRoom);
+            SpawnEnemy(other.GetComponent<Laser>().Room);
         }
     }
 
@@ -175,7 +172,7 @@ public class PlayerController : MonoBehaviour
     {
         for (int i = 0; i < _enemyToSpawn; i++)
         {
-            GameObject enemy = Instantiate(_enemy, room.transform.parent);
+            GameObject enemy = Instantiate(_enemy, room.transform.transform);
             Vector3 position = enemy.transform.localPosition;
             int x = Random.Range(-_roomLength / 2, _roomLength / 2);
             int y = Random.Range(0, _wallHeight / 2);
@@ -183,7 +180,7 @@ public class PlayerController : MonoBehaviour
             position.x = x;
             position.y = y;
             position.z = z;
-            enemy.transform.position = position;
+            enemy.transform.localPosition = position;
             enemy.GetComponent<FlyingDrone>().Target = transform;
         }
     }

@@ -4,6 +4,7 @@ public class Laser : MonoBehaviour
 {
     [SerializeField] private float _speed, _maxHorizontal, _maxVertical;
     private bool _isMovingHorizontal, _isMovingVertical, _revertDirection;
+    public GameObject Room;
 
     private void Awake()
     {

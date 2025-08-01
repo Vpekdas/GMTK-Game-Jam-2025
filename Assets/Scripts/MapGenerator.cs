@@ -301,6 +301,7 @@ public class MapGenerator : MonoBehaviour
             position.x = x;
             position.y = y;
             laser.transform.localPosition = position;
+            laser.GetComponent<Laser>().Room = room.Prefab;
         }
 
         GameObject collectible = Instantiate(_laserRoomCollectible, room.Prefab.transform);

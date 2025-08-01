@@ -119,68 +119,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1001 &205594615
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 2219013748179494446, guid: b56087d37ee1b4608a20409dff70096f, type: 3}
-      propertyPath: m_Name
-      value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 4178842740846556209, guid: b56087d37ee1b4608a20409dff70096f, type: 3}
-      propertyPath: m_PlayOnAwake
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5950511591913916292, guid: b56087d37ee1b4608a20409dff70096f, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 14.6
-      objectReference: {fileID: 0}
-    - target: {fileID: 5950511591913916292, guid: b56087d37ee1b4608a20409dff70096f, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 23.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 5950511591913916292, guid: b56087d37ee1b4608a20409dff70096f, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -2.18585
-      objectReference: {fileID: 0}
-    - target: {fileID: 5950511591913916292, guid: b56087d37ee1b4608a20409dff70096f, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5950511591913916292, guid: b56087d37ee1b4608a20409dff70096f, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5950511591913916292, guid: b56087d37ee1b4608a20409dff70096f, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5950511591913916292, guid: b56087d37ee1b4608a20409dff70096f, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5950511591913916292, guid: b56087d37ee1b4608a20409dff70096f, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5950511591913916292, guid: b56087d37ee1b4608a20409dff70096f, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5950511591913916292, guid: b56087d37ee1b4608a20409dff70096f, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 1058777747055066114, guid: b56087d37ee1b4608a20409dff70096f, type: 3}
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: b56087d37ee1b4608a20409dff70096f, type: 3}
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -314,6 +252,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 2559815757044005026, guid: b56087d37ee1b4608a20409dff70096f, type: 3}
+      propertyPath: _enemy
+      value: 
+      objectReference: {fileID: 8677084160021264216, guid: 125793a488205a061aa7992b5a4349e5, type: 3}
+    - target: {fileID: 2559815757044005026, guid: b56087d37ee1b4608a20409dff70096f, type: 3}
+      propertyPath: _enemyToSpawn
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5950511591913916292, guid: b56087d37ee1b4608a20409dff70096f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -443,9 +389,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _room: {fileID: 606124408765798331, guid: 020546991ac254f3ca64d2a55a8520d9, type: 3}
   _door: {fileID: 7424986910390960992, guid: fc29f8ef782f14abfa0a23befd1b54a7, type: 3}
+  _laser: {fileID: 7285146088290920482, guid: d68f97b282ae74ee987638b6a1ad7ba4, type: 3}
+  _laserRoomCollectible: {fileID: 7899234328208242204, guid: ed8e6286572b8495d91d9a04be75b67c, type: 3}
   _forceRoomType: 1
-  _forcedRoomType: 1
-  _flyingEnemy: {fileID: 0}
+  _forcedRoomType: 0
+  _laserNumber: 6
+  _flyingEnemy: {fileID: 8677084160021264216, guid: 125793a488205a061aa7992b5a4349e5, type: 3}
   _crates: {fileID: 1070010812685910317, guid: 0af6b1cc4960047f8989a807d1152bae, type: 3}
   _barrel: {fileID: 4012906592762768337, guid: a0de6992bbb83f1f7b6cc4bb41921176, type: 3}
   _concreteSlab: {fileID: 8866160098843329273, guid: 140978691188dffe0aed40e4dd8ad60c, type: 3}
@@ -471,4 +420,4 @@ SceneRoots:
   - {fileID: 410087041}
   - {fileID: 832575519}
   - {fileID: 1206617599}
-  - {fileID: 205594615}
+  - {fileID: 663106533}
