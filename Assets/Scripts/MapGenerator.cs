@@ -32,7 +32,6 @@ public class MapGenerator : MonoBehaviour
     {
         GenerateRoom();
         RemoveWallsBetweenRooms();
-        // GenerateDoor();
     }
 
 
@@ -151,28 +150,4 @@ public class MapGenerator : MonoBehaviour
             Destroy(wall.gameObject);
         }
     }
-
-    private void GenerateDoor()
-    {
-        for (int i = 1; i < _roomsList.Count; i++)
-        {
-            Vector3 position = GenerateDoorPosition(_roomsList[i]);
-            Instantiate(_door, position, _door.transform.rotation);
-        }
-    }
-
-    private Vector3 GenerateDoorPosition(Room room)
-    {
-        RoomPosition roomPosition = room.RoomPosition;
-        Vector3 position = room.Prefab.transform.position;
-        return roomPosition switch
-        {
-            RoomPosition.Top => position + new Vector3(0.0f, 0.0f, -_roomLength),
-            RoomPosition.Right => position + new Vector3(-_roomLength, 0.0f, 0.0f),
-            RoomPosition.Bottom => position + new Vector3(0.0f, 0.0f, _roomLength),
-            RoomPosition.Left => position + new Vector3(_roomLength, 0.0f, 0.0f),
-            _ => new Vector3(0, 0, 0),
-        };
-    }
-
 }
