@@ -7,6 +7,8 @@ public class Door : MonoBehaviour
     private float _maxHeight;
     private GameObject _door;
 
+    public bool IsOpening { get => _isOpening; set => _isOpening = value; }
+
     private void Awake()
     {
         _isOpening = false;
@@ -31,10 +33,5 @@ public class Door : MonoBehaviour
                 _isOpening = false;
             }
         }
-    }
-
-    public void OpenDoor()
-    {
-        _isOpening = true;
     }
 }

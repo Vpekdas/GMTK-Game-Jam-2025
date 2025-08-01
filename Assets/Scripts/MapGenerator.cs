@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MapGenerator : MonoBehaviour
@@ -17,6 +18,7 @@ public class MapGenerator : MonoBehaviour
     {
         Laser,
         Action,
+        Main,
     }
 
     public class Room
@@ -26,13 +28,12 @@ public class MapGenerator : MonoBehaviour
         public RoomType Type;
     }
 
-    [SerializeField] private GameObject _room;
-    [SerializeField] private GameObject _door;
+    [SerializeField] private GameObject _room, _door, _laser, _laserRoomCollectible;
     [SerializeField] private bool _forceRoomType = false;
     [SerializeField] private RoomType _forcedRoomType = RoomType.Laser;
-
+    [SerializeField] private int _laserNumber;
     private List<Room> _roomsList;
-    private float _roomLength = 30.0f;
+    private readonly int _roomLength = 30, _wallHeight = 16;
 
 
     private void Awake()
@@ -66,6 +67,7 @@ public class MapGenerator : MonoBehaviour
             if (i == 0)
             {
                 GameObject prefab = Instantiate(_room, Vector3.zero, _room.transform.rotation);
+                prefab.name = "Room0";
                 Room room = new()
                 {
                     Prefab = prefab,
@@ -85,8 +87,8 @@ public class MapGenerator : MonoBehaviour
                     roomPosition = (RoomPosition)Random.Range(0, 3);
                     position = GenerateRoomPosition(roomPosition, previousPosition);
                 }
-                Debug.Log(roomPosition);
                 GameObject prefab = Instantiate(_room, position, _room.transform.rotation);
+                prefab.name = "Room" + i;
                 Room room = new()
                 {
                     Prefab = prefab,
@@ -290,6 +292,21 @@ public class MapGenerator : MonoBehaviour
 
     private void GenerateLaserRoom(Room room)
     {
+        for (int i = 0; i < _laserNumber; i++)
+        {
+            GameObject laser = Instantiate(_laser, room.Prefab.transform);
+            Vector3 position = laser.transform.localPosition;
+            int x = Random.Range(-_roomLength / 2, _roomLength / 2);
+            int y = Random.Range(0, _wallHeight / 2);
+            position.x = x;
+            position.y = y;
+            laser.transform.localPosition = position;
+            laser.GetComponent<Laser>().Room = room.Prefab;
+        }
 
+        GameObject collectible = Instantiate(_laserRoomCollectible, room.Prefab.transform);
+        Vector3 collectiblePosition = collectible.transform.localPosition;
+        collectiblePosition.y = 1.8f;
+        collectible.transform.localPosition = collectiblePosition;
     }
 }

@@ -9,12 +9,14 @@ public class FlyingDrone : MonoBehaviour
     private AudioSource _explosionAudioSource;
     private AudioSource _gunAudioSource;
 
-    public Transform target;
+    private Transform _target;
 
     private Mortal _mortal;
     private float _time;
     private float _lastBulletTime;
     private bool _isDestroyed;
+
+    public Transform Target { get => _target; set => _target = value; }
 
     void Awake()
     {
@@ -37,7 +39,7 @@ public class FlyingDrone : MonoBehaviour
     {
         _time += Time.fixedDeltaTime;
 
-        if (!_mortal.IsDead() && _time - _lastBulletTime >= _cooldownTime && CanSeeTarget(target, 60.0f, 10.0f))
+        if (!_mortal.IsDead() && _time - _lastBulletTime >= _cooldownTime && CanSeeTarget(_target, 60.0f, 10.0f))
         {
             GameObject bullet = Instantiate(_bullet, transform.position + transform.forward * 0.4f, Quaternion.identity);
             Rigidbody rb = bullet.GetComponent<Rigidbody>();
@@ -47,7 +49,7 @@ public class FlyingDrone : MonoBehaviour
 
             // TODO: Rotate the turret & drone toward the player.
             //       The gun first then the drone lag behind a bit.
-            Vector3 toPlayer = target.position - transform.position;
+            Vector3 toPlayer = _target.position - transform.position;
             toPlayer.Normalize();
 
             rb.AddForce(toPlayer * 12.0f, ForceMode.Force);

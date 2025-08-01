@@ -12,11 +12,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _lookSpeedV = 3.0f;
     [SerializeField] private Camera _camera;
     [SerializeField] private Transform _head;
-    [SerializeField] private GameObject _bullet;
+    [SerializeField] private GameObject _bullet, _enemy;
     [SerializeField] private Transform _pistol;
 
     [SerializeField] private float _explosionShakeTime = 0.2f;
     [SerializeField] private AnimationCurve _explosionShakeCurve;
+    [SerializeField] private int _enemyToSpawn;
 
     private Rigidbody _rb;
     private Vector2 _input;
@@ -25,6 +26,8 @@ public class PlayerController : MonoBehaviour
     private float _time;
     private float _lastBulletTime;
     private float _bulletCooldown = 0.4f;
+    private readonly int _roomLength = 30, _wallHeight = 16;
+
 
     private void Awake()
     {
@@ -144,5 +147,41 @@ public class PlayerController : MonoBehaviour
     public void UnlockMouse(InputAction.CallbackContext context)
     {
         Cursor.lockState = CursorLockMode.None;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        // For Laser Room
+        if (other.CompareTag("Collectible"))
+        {
+            Transform room = other.gameObject.transform.parent.transform.parent;
+            char roomNumber = room.name[^1];
+            roomNumber++;
+            GameObject nextObj = GameObject.Find("Room" + roomNumber);
+            Transform nextTrans = nextObj.transform.Find("Door Wall(Clone)");
+            nextTrans.GetComponent<Door>().IsOpening = true;
+            Destroy(other.gameObject);
+        }
+        else if (other.CompareTag("Laser"))
+        {
+            SpawnEnemy(other.GetComponent<Laser>().Room);
+        }
+    }
+
+    private void SpawnEnemy(GameObject room)
+    {
+        for (int i = 0; i < _enemyToSpawn; i++)
+        {
+            GameObject enemy = Instantiate(_enemy, room.transform.transform);
+            Vector3 position = enemy.transform.localPosition;
+            int x = Random.Range(-_roomLength / 2, _roomLength / 2);
+            int y = Random.Range(0, _wallHeight / 2);
+            int z = Random.Range(-_roomLength / 2, _roomLength / 2);
+            position.x = x;
+            position.y = y;
+            position.z = z;
+            enemy.transform.localPosition = position;
+            enemy.GetComponent<FlyingDrone>().Target = transform;
+        }
     }
 }
