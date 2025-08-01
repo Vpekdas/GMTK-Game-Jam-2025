@@ -26,13 +26,12 @@ public class MapGenerator : MonoBehaviour
         public RoomType Type;
     }
 
-    [SerializeField] private GameObject _room;
-    [SerializeField] private GameObject _door;
+    [SerializeField] private GameObject _room, _door, _laser;
     [SerializeField] private bool _forceRoomType = false;
     [SerializeField] private RoomType _forcedRoomType = RoomType.Laser;
 
     private List<Room> _roomsList;
-    private float _roomLength = 30.0f;
+    private readonly int _roomLength = 30, _wallHeight = 16;
 
 
     private void Awake()
@@ -290,6 +289,15 @@ public class MapGenerator : MonoBehaviour
 
     private void GenerateLaserRoom(Room room)
     {
-
+        for (int i = 0; i < 6; i++)
+        {
+            GameObject laser = Instantiate(_laser, room.Prefab.transform);
+            Vector3 position = laser.transform.localPosition;
+            int x = Random.Range(-_roomLength / 2, _roomLength / 2);
+            int y = Random.Range(0, _wallHeight / 2);
+            position.x = x;
+            position.y = y;
+            laser.transform.localPosition = position;
+        }
     }
 }
