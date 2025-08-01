@@ -111,6 +111,9 @@ public class PlayerController : MonoBehaviour
 
     public void LockMouse(InputAction.CallbackContext context)
     {
+        if (!context.performed)
+            return;
+
         Cursor.lockState = CursorLockMode.Locked;
     }
 
@@ -146,7 +149,18 @@ public class PlayerController : MonoBehaviour
 
     public void UnlockMouse(InputAction.CallbackContext context)
     {
+        if (!context.performed)
+            return;
+
         Cursor.lockState = CursorLockMode.None;
+    }
+
+    public void Jump(InputAction.CallbackContext context)
+    {
+        if (!context.performed)
+            return;
+
+        _rb.AddForce(transform.up * 6.0f, ForceMode.Impulse);
     }
 
     private void OnTriggerEnter(Collider other)
