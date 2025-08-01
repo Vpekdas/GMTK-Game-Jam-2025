@@ -32,7 +32,7 @@ public class MapGenerator : MonoBehaviour
     [SerializeField] private RoomType _forcedRoomType = RoomType.Laser;
 
     private List<Room> _roomsList;
-    private int _roomLength = 30;
+    private float _roomLength = 30.0f;
 
 
     private void Awake()
@@ -96,6 +96,7 @@ public class MapGenerator : MonoBehaviour
                 _roomsList.Add(room);
             }
 
+            previousRoom = roomType;
         }
     }
 
@@ -197,7 +198,93 @@ public class MapGenerator : MonoBehaviour
                 GenerateLaserRoom(room);
                 break;
             case RoomType.Action:
+                PopulateActionRoom(room);
                 break;
+        }
+    }
+
+    enum ActionObstacleType
+    {
+        Empty,
+        FlyingEnemy,
+        Crates,
+        ExplosiveBarrel,
+        ConcreteSlab,
+    }
+
+    [SerializeField] private GameObject _flyingEnemy;
+    [SerializeField] private GameObject _crates;
+    [SerializeField] private GameObject _barrel;
+    [SerializeField] private GameObject _concreteSlab;
+
+    private void PopulateActionRoom(Room room)
+    {
+        ActionObstacleType[] obstacles = new ActionObstacleType[15 * 15];
+
+        Debug.Log(room.Prefab.transform.position);
+
+        for (int x = 0; x < 15; x++)
+        {
+            for (int y = 0; y < 15; y++)
+            {
+                bool hasObstacle = Random.Range(0, 10) == 0;
+
+                if (!hasObstacle)
+                {
+                    obstacles[x + y * 15] = ActionObstacleType.Empty;
+                    continue;
+                }
+
+                int obstacleType = Random.Range(0, 7);
+                if (obstacleType < 2)
+                {
+                    obstacles[x + y * 15] = ActionObstacleType.ExplosiveBarrel;
+                }
+                else if (obstacleType < 4)
+                {
+                    obstacles[x + y * 15] = ActionObstacleType.Crates;
+                }
+                else
+                {
+                    obstacles[x + y * 15] = ActionObstacleType.ConcreteSlab;
+                }
+            }
+        }
+
+        for (int x = 0; x < 15; x++)
+        {
+            for (int y = 0; y < 15; y++)
+            {
+                ActionObstacleType obstacle = obstacles[x + y * 15];
+
+                switch (obstacle)
+                {
+                    case ActionObstacleType.Empty:
+                        break;
+                    case ActionObstacleType.FlyingEnemy:
+                        break;
+                    case ActionObstacleType.Crates:
+                        {
+                            Vector2 randomness = new(Random.Range(-0.1f, 0.1f), Random.Range(-0.1f, 0.1f));
+                            float angle = Random.Range(-180.0f, 180.0f);
+                            Instantiate(_crates, room.Prefab.transform.position + new Vector3(x * 2.0f + 1.0f + randomness.x - _roomLength / 2.0f, 1.0f, y * 2.0f + 1.0f + randomness.y - _roomLength / 2.0f), Quaternion.Euler(0.0f, angle, 0.0f));
+                        }
+                        break;
+                    case ActionObstacleType.ExplosiveBarrel:
+                        {
+                            Vector2 randomness = new(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f));
+                            Instantiate(_barrel, room.Prefab.transform.position + new Vector3(x * 2.0f + 1.0f + randomness.x - _roomLength / 2.0f, 1.0f, y * 2.0f + 1.0f + randomness.y - _roomLength / 2.0f), Quaternion.identity);
+                        }
+                        break;
+                    case ActionObstacleType.ConcreteSlab:
+                        {
+                            Vector2 randomness = new(Random.Range(-0.1f, 0.1f), Random.Range(-0.1f, 0.1f));
+                            float angle = Random.Range(-180.0f, 180.0f);
+                            Instantiate(_concreteSlab, room.Prefab.transform.position + new Vector3(x * 2.0f + 1.0f + randomness.x - _roomLength / 2.0f, 2.5f, y * 2.0f + 1.0f + randomness.y - _roomLength / 2.0f), Quaternion.Euler(-90.0f, angle, 0.0f));
+                        }
+                        break;
+                }
+            }
         }
     }
 
