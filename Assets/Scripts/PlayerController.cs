@@ -81,12 +81,12 @@ public class PlayerController : MonoBehaviour
     private IEnumerator ShakeShakeShake()
     {
         Vector3 startPosition = transform.position;
-        float elaspedTime = 0.0f;
+        float elapsedTime = 0.0f;
 
-        while (elaspedTime < _explosionShakeTime)
+        while (elapsedTime < _explosionShakeTime)
         {
-            elaspedTime += Time.deltaTime;
-            float strength = _explosionShakeCurve.Evaluate(elaspedTime / _explosionShakeTime);
+            elapsedTime += Time.deltaTime;
+            float strength = _explosionShakeCurve.Evaluate(elapsedTime / _explosionShakeTime);
             transform.position = startPosition + Random.insideUnitSphere * strength;
             yield return null;
         }
@@ -188,14 +188,23 @@ public class PlayerController : MonoBehaviour
         {
             GameObject enemy = Instantiate(_enemy, room.transform.transform);
             Vector3 position = enemy.transform.localPosition;
+
             int x = Random.Range(-_roomLength / 2, _roomLength / 2);
             int y = Random.Range(0, _wallHeight / 2);
             int z = Random.Range(-_roomLength / 2, _roomLength / 2);
+
             position.x = x;
             position.y = y;
             position.z = z;
             enemy.transform.localPosition = position;
+
+            Vector3 playerDirection = (transform.position - enemy.transform.position).normalized;
+            Quaternion rotation = Quaternion.LookRotation(playerDirection);
+            enemy.transform.rotation = rotation;
+
             enemy.GetComponent<FlyingDrone>().Target = transform;
+
+
         }
     }
 }

@@ -35,6 +35,13 @@ public class FlyingDrone : MonoBehaviour
     {
     }
 
+    private void Update()
+    {
+        Vector3 playerDirection = (_target.transform.position - transform.position).normalized;
+        Quaternion rotation = Quaternion.LookRotation(playerDirection);
+        transform.rotation = rotation;
+    }
+
     void FixedUpdate()
     {
         _time += Time.fixedDeltaTime;
@@ -46,6 +53,8 @@ public class FlyingDrone : MonoBehaviour
             Bullet b = bullet.GetComponent<Bullet>();
 
             _gunAudioSource.Play();
+
+
 
             // TODO: Rotate the turret & drone toward the player.
             //       The gun first then the drone lag behind a bit.
