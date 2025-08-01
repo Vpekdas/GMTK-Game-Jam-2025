@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
     private float _lastBulletTime;
     private float _bulletCooldown = 0.4f;
     private readonly int _roomLength = 30, _wallHeight = 16;
+    private bool _isGrounded;
 
 
     private void Awake()
@@ -34,6 +35,7 @@ public class PlayerController : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
 
         explosionEvent.AddListener(ShakeScreen);
+        _isGrounded = true;
     }
 
     private void Start()
@@ -81,12 +83,12 @@ public class PlayerController : MonoBehaviour
     private IEnumerator ShakeShakeShake()
     {
         Vector3 startPosition = transform.position;
-        float elaspedTime = 0.0f;
+        float elapsedTime = 0.0f;
 
-        while (elaspedTime < _explosionShakeTime)
+        while (elapsedTime < _explosionShakeTime)
         {
-            elaspedTime += Time.deltaTime;
-            float strength = _explosionShakeCurve.Evaluate(elaspedTime / _explosionShakeTime);
+            elapsedTime += Time.deltaTime;
+            float strength = _explosionShakeCurve.Evaluate(elapsedTime / _explosionShakeTime);
             transform.position = startPosition + Random.insideUnitSphere * strength;
             yield return null;
         }
@@ -157,10 +159,11 @@ public class PlayerController : MonoBehaviour
 
     public void Jump(InputAction.CallbackContext context)
     {
-        if (!context.performed)
+        if (!context.performed || !_isGrounded)
             return;
 
         _rb.AddForce(transform.up * 6.0f, ForceMode.Impulse);
+        _isGrounded = false;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -188,14 +191,31 @@ public class PlayerController : MonoBehaviour
         {
             GameObject enemy = Instantiate(_enemy, room.transform.transform);
             Vector3 position = enemy.transform.localPosition;
+
             int x = Random.Range(-_roomLength / 2, _roomLength / 2);
             int y = Random.Range(0, _wallHeight / 2);
             int z = Random.Range(-_roomLength / 2, _roomLength / 2);
+
             position.x = x;
             position.y = y;
             position.z = z;
             enemy.transform.localPosition = position;
+
+            Vector3 playerDirection = (transform.position - enemy.transform.position).normalized;
+            Quaternion rotation = Quaternion.LookRotation(playerDirection);
+            enemy.transform.rotation = rotation;
+
             enemy.GetComponent<FlyingDrone>().Target = transform;
+
+
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            _isGrounded = true;
         }
     }
 }

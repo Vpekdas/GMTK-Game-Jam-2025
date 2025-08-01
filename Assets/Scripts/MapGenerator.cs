@@ -137,7 +137,7 @@ public class MapGenerator : MonoBehaviour
             {
                 case RoomPosition.Top:
                     Transform wall = _roomsList[i].Prefab.transform.Find("Bottom Wall");
-                    Vector3 position = new(wall.transform.position.x + 8, 8.0f, wall.transform.position.z);
+                    Vector3 position = new(wall.transform.position.x + 9, 8.0f, wall.transform.position.z);
                     GameObject doorWall = Instantiate(_door, position, _door.transform.rotation);
                     doorWall.transform.parent = _roomsList[i].Prefab.transform;
 
@@ -146,7 +146,7 @@ public class MapGenerator : MonoBehaviour
                     break;
                 case RoomPosition.Bottom:
                     wall = _roomsList[i].Prefab.transform.Find("Top Wall");
-                    position = new(wall.transform.position.x + 8, 8.0f, wall.transform.position.z);
+                    position = new(wall.transform.position.x + 9, 8.0f, wall.transform.position.z);
                     doorWall = Instantiate(_door, position, _door.transform.rotation);
                     doorWall.transform.parent = _roomsList[i].Prefab.transform;
 
