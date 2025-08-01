@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,13 +12,21 @@ public class MapGenerator : MonoBehaviour
         Left,
         Main,
     }
+
+    public enum RoomType
+    {
+        Laser,
+        Action,
+    }
+
     public class Room
     {
         public GameObject Prefab;
         public RoomPosition RoomPosition;
+        public RoomType Type;
     }
 
-    [SerializeField] private GameObject[] _rooms;
+    [SerializeField] private GameObject _room;
     [SerializeField] private GameObject _door;
     private List<Room> _roomsList;
     private int _roomLength = 30;
@@ -30,22 +39,35 @@ public class MapGenerator : MonoBehaviour
 
     private void Start()
     {
-        GenerateRoom();
+        GenerateRooms();
         RemoveWallsBetweenRooms();
+        PopulateRooms();
     }
 
 
-    private void GenerateRoom()
+    private void GenerateRooms()
     {
+        RoomType previousRoom = RoomType.Laser;
+
         for (int i = 0; i < 6; i++)
         {
+            List<RoomType> roomTypes = new() { RoomType.Laser, RoomType.Action };
+
+            if (i > 0)
+            {
+                roomTypes.Remove(previousRoom);
+            }
+
+            RoomType roomType = roomTypes[Random.Range(0, roomTypes.Count)];
+
             if (i == 0)
             {
-                GameObject prefab = Instantiate(_rooms[0], Vector3.zero, _rooms[0].transform.rotation);
+                GameObject prefab = Instantiate(_room, Vector3.zero, _room.transform.rotation);
                 Room room = new()
                 {
                     Prefab = prefab,
                     RoomPosition = RoomPosition.Main,
+                    Type = roomType,
                 };
                 _roomsList.Add(room);
             }
@@ -61,11 +83,12 @@ public class MapGenerator : MonoBehaviour
                     position = GenerateRoomPosition(roomPosition, previousPosition);
                 }
                 Debug.Log(roomPosition);
-                GameObject prefab = Instantiate(_rooms[0], position, _rooms[0].transform.rotation);
+                GameObject prefab = Instantiate(_room, position, _room.transform.rotation);
                 Room room = new()
                 {
                     Prefab = prefab,
                     RoomPosition = roomPosition,
+                    Type = roomType,
                 };
                 _roomsList.Add(room);
             }
@@ -148,6 +171,25 @@ public class MapGenerator : MonoBehaviour
         if (wall != null)
         {
             Destroy(wall.gameObject);
+        }
+    }
+
+    private void PopulateRooms()
+    {
+        foreach (Room room in _roomsList)
+        {
+            PopulateRoom(room);
+        }
+    }
+
+    private void PopulateRoom(Room room)
+    {
+        switch (room.Type)
+        {
+            case RoomType.Laser:
+                break;
+            case RoomType.Action:
+                break;
         }
     }
 }
