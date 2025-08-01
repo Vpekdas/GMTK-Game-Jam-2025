@@ -135,7 +135,8 @@ public class MapGenerator : MonoBehaviour
                 case RoomPosition.Top:
                     Transform wall = _roomsList[i].Prefab.transform.Find("Bottom Wall");
                     Vector3 position = new(wall.transform.position.x + 8, 8.0f, wall.transform.position.z);
-                    Instantiate(_door, position, _door.transform.rotation);
+                    GameObject doorWall = Instantiate(_door, position, _door.transform.rotation);
+                    doorWall.transform.parent = _roomsList[i].Prefab.transform;
 
                     RemoveWallByName(currentRoom.Prefab, "Bottom Wall");
                     RemoveWallByName(previousRoom.Prefab, "Top Wall");
@@ -143,7 +144,8 @@ public class MapGenerator : MonoBehaviour
                 case RoomPosition.Bottom:
                     wall = _roomsList[i].Prefab.transform.Find("Top Wall");
                     position = new(wall.transform.position.x + 8, 8.0f, wall.transform.position.z);
-                    Instantiate(_door, position, _door.transform.rotation);
+                    doorWall = Instantiate(_door, position, _door.transform.rotation);
+                    doorWall.transform.parent = _roomsList[i].Prefab.transform;
 
                     RemoveWallByName(currentRoom.Prefab, "Top Wall");
                     RemoveWallByName(previousRoom.Prefab, "Bottom Wall");
@@ -151,7 +153,8 @@ public class MapGenerator : MonoBehaviour
                 case RoomPosition.Left:
                     wall = _roomsList[i].Prefab.transform.Find("Right Wall");
                     position = new(wall.transform.position.x, 8.0f, wall.transform.position.z - 9);
-                    Instantiate(_door, position, Quaternion.Euler(0.0f, 90.0f, 0.0f));
+                    doorWall = Instantiate(_door, position, Quaternion.Euler(0.0f, 90.0f, 0.0f));
+                    doorWall.transform.parent = _roomsList[i].Prefab.transform;
 
                     RemoveWallByName(currentRoom.Prefab, "Right Wall");
                     RemoveWallByName(previousRoom.Prefab, "Left Wall");
@@ -159,7 +162,8 @@ public class MapGenerator : MonoBehaviour
                 case RoomPosition.Right:
                     wall = _roomsList[i].Prefab.transform.Find("Left Wall");
                     position = new(wall.transform.position.x, 8.0f, wall.transform.position.z - 9);
-                    Instantiate(_door, position, Quaternion.Euler(0.0f, 90.0f, 0.0f));
+                    doorWall = Instantiate(_door, position, Quaternion.Euler(0.0f, 90.0f, 0.0f));
+                    doorWall.transform.parent = _roomsList[i].Prefab.transform;
 
                     RemoveWallByName(currentRoom.Prefab, "Left Wall");
                     RemoveWallByName(previousRoom.Prefab, "Right Wall");
@@ -190,9 +194,15 @@ public class MapGenerator : MonoBehaviour
         switch (room.Type)
         {
             case RoomType.Laser:
+                GenerateLaserRoom(room);
                 break;
             case RoomType.Action:
                 break;
         }
+    }
+
+    private void GenerateLaserRoom(Room room)
+    {
+
     }
 }
