@@ -28,6 +28,9 @@ public class MapGenerator : MonoBehaviour
 
     [SerializeField] private GameObject _room;
     [SerializeField] private GameObject _door;
+    [SerializeField] private bool _forceRoomType = false;
+    [SerializeField] private RoomType _forcedRoomType = RoomType.Laser;
+
     private List<Room> _roomsList;
     private int _roomLength = 30;
 
@@ -58,7 +61,7 @@ public class MapGenerator : MonoBehaviour
                 roomTypes.Remove(previousRoom);
             }
 
-            RoomType roomType = roomTypes[Random.Range(0, roomTypes.Count)];
+            RoomType roomType = _forceRoomType ? _forcedRoomType : roomTypes[Random.Range(0, roomTypes.Count)];
 
             if (i == 0)
             {
