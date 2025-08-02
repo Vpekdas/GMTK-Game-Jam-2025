@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -19,6 +20,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private AnimationCurve _explosionShakeCurve;
     [SerializeField] private int _enemyToSpawn;
     [SerializeField] private MapGenerator _map;
+    [SerializeField] GameManager _gameManager;
 
     private Rigidbody _rb;
     private Vector2 _input;
@@ -74,6 +76,7 @@ public class PlayerController : MonoBehaviour
     public void Kill()
     {
         // Debug.Log("Player is ded :(");
+        SceneManager.LoadScene(0, LoadSceneMode.Single);
     }
 
     public void ShakeScreen()
@@ -189,6 +192,10 @@ public class PlayerController : MonoBehaviour
             door.IsOpening = false;
             door.IsClosing = true;
             _map.CurrentRoom = door.Room;
+        }
+        else if (other.CompareTag("Portal"))
+        {
+            _gameManager.IsGameActive = false;
         }
     }
 

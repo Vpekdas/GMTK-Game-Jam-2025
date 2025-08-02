@@ -262,7 +262,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5950511591913916292, guid: b56087d37ee1b4608a20409dff70096f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5950511591913916292, guid: b56087d37ee1b4608a20409dff70096f, type: 3}
       propertyPath: m_LocalPosition.y
@@ -448,8 +448,10 @@ MonoBehaviour:
   _door: {fileID: 7424986910390960992, guid: fc29f8ef782f14abfa0a23befd1b54a7, type: 3}
   _laser: {fileID: 7285146088290920482, guid: d68f97b282ae74ee987638b6a1ad7ba4, type: 3}
   _laserRoomCollectible: {fileID: 7899234328208242204, guid: ed8e6286572b8495d91d9a04be75b67c, type: 3}
+  _mainRoom: {fileID: 606124408765798331, guid: fe40c0f33b5ff4b6bbe47b38d63010e2, type: 3}
+  _endRoom: {fileID: 606124408765798331, guid: 45803ad40a0a24861b6389f4b519e53a, type: 3}
   _forceRoomType: 1
-  _forcedRoomType: 1
+  _forcedRoomType: 0
   _laserNumber: 6
   _player: {fileID: 854015865}
   _flyingEnemy: {fileID: 8677084160021264216, guid: 125793a488205a061aa7992b5a4349e5, type: 3}

@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI _timerText;
     private bool _isGameActive;
 
+    public bool IsGameActive { get => _isGameActive; set => _isGameActive = value; }
+
     private void Awake()
     {
         _isGameActive = true;
