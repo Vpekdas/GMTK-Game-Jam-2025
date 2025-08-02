@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
         while (_timer > 0 && _isGameActive)
         {
             _timer--;
-            _timerText.text = "Time: " + _timer;
+            _timerText.text = "Time before portal closes: " + _timer;
             yield return new WaitForSeconds(1.0f);
         }
     }

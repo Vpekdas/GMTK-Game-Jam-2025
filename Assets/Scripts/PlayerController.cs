@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _lookSpeedV = 3.0f;
     [SerializeField] private Camera _camera;
     [SerializeField] private Transform _head;
-    [SerializeField] private GameObject _bullet, _enemy;
+    [SerializeField] private GameObject _bullet, _enemy, _transition, _endTransition;
     [SerializeField] private Transform _pistol;
 
     [SerializeField] private float _explosionShakeTime = 0.2f;
@@ -30,7 +30,9 @@ public class PlayerController : MonoBehaviour
     private float _lastBulletTime;
     private float _bulletCooldown = 0.4f;
     private readonly int _roomLength = 30, _wallHeight = 16;
-    private bool _isGrounded;
+    private bool _isGrounded, _isDead, _isHoldingPistol;
+
+    public bool IsDead { get => _isDead; set => _isDead = value; }
 
 
     private void Awake()
@@ -39,10 +41,13 @@ public class PlayerController : MonoBehaviour
 
         explosionEvent.AddListener(ShakeScreen);
         _isGrounded = true;
+        _isDead = false;
+        _isHoldingPistol = false;
     }
 
     private void Start()
     {
+        _pistol.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -76,7 +81,10 @@ public class PlayerController : MonoBehaviour
     public void Kill()
     {
         // Debug.Log("Player is ded :(");
-        SceneManager.LoadScene(0, LoadSceneMode.Single);
+        if (!_isDead)
+        {
+            _transition.SetActive(true);
+        }
     }
 
     public void ShakeScreen()
@@ -140,7 +148,13 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
+        if (!_isHoldingPistol)
+        {
+            return;
+        }
+
         _lastBulletTime = _time;
+
 
         GameObject bullet = Instantiate(_bullet, _pistol.transform.position, Quaternion.identity);
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
@@ -175,6 +189,11 @@ public class PlayerController : MonoBehaviour
         // For Laser Room
         if (other.CompareTag("Collectible"))
         {
+            if (!_pistol.gameObject.activeInHierarchy)
+            {
+                _pistol.gameObject.SetActive(true);
+                _isHoldingPistol = true;
+            }
             Transform room = other.gameObject.transform.parent.transform.parent;
             char roomNumber = room.name[^1];
             roomNumber++;
@@ -196,6 +215,7 @@ public class PlayerController : MonoBehaviour
         else if (other.CompareTag("Portal"))
         {
             _gameManager.IsGameActive = false;
+            _endTransition.SetActive(true);
         }
     }
 
@@ -232,4 +252,6 @@ public class PlayerController : MonoBehaviour
             _isGrounded = true;
         }
     }
+
+
 }
