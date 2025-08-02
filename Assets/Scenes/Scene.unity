@@ -431,7 +431,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _timer: 60
   _timerText: {fileID: 2076887043}
-  _transition: {fileID: 0}
+  _transition: {fileID: 2069767014}
 --- !u!4 &715702962
 Transform:
   m_ObjectHideFlags: 0
