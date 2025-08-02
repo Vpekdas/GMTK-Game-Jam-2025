@@ -4,7 +4,7 @@ public class FlyingDrone : MonoBehaviour
 {
     [SerializeField] private float _cooldownTime = 0.5f;
     [SerializeField] private GameObject _bullet;
-    private ParticleSystem _particleSystem;
+    [SerializeField] private ParticleSystem _particleSystem;
     private Rigidbody _rb;
     private AudioSource _explosionAudioSource;
     private AudioSource _gunAudioSource;
@@ -68,10 +68,10 @@ public class FlyingDrone : MonoBehaviour
             _lastBulletTime = _time;
         }
 
-        if (_isDestroyed && !_particleSystem.IsAlive())
-        {
-            Destroy(gameObject);
-        }
+        // if (_isDestroyed && !_particleSystem.IsAlive())
+        // {
+        //     Destroy(gameObject);
+        // }
     }
 
     void OnDeath()

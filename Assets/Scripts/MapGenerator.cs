@@ -24,16 +24,36 @@ public class MapGenerator : MonoBehaviour
     public class Room
     {
         public GameObject Prefab;
-        public RoomPosition RoomPosition;
+        public RoomPosition Position;
         public RoomType Type;
+        public int Index;
+        public bool Finished = false;
+    }
+
+    public class ActionRoom : Room
+    {
+        public List<GameObject> Enemies = new();
+
+        public bool AllEnemyAreDead()
+        {
+            foreach (GameObject enemy in Enemies)
+            {
+                if (!enemy.GetComponent<Mortal>().IsDead())
+                    return false;
+            }
+
+            return true;
+        }
     }
 
     [SerializeField] private GameObject _room, _door, _laser, _laserRoomCollectible;
     [SerializeField] private bool _forceRoomType = false;
     [SerializeField] private RoomType _forcedRoomType = RoomType.Laser;
     [SerializeField] private int _laserNumber;
+    [SerializeField] private PlayerController _player;
     private List<Room> _roomsList;
     private readonly int _roomLength = 30, _wallHeight = 16;
+    public Room CurrentRoom;
 
 
     private void Awake()
@@ -46,8 +66,30 @@ public class MapGenerator : MonoBehaviour
         GenerateRooms();
         RemoveWallsBetweenRooms();
         PopulateRooms();
+
+        // TODO: Should not be set before entering the first room.
+        CurrentRoom = _roomsList[0];
     }
 
+    private void Update()
+    {
+        if (CurrentRoom is ActionRoom room && !room.Finished)
+        {
+            if (room.AllEnemyAreDead())
+            {
+                if (room.Index < 5)
+                {
+                    Transform door = _roomsList[room.Index + 1].Prefab.transform.Find("Door Wall(Clone)");
+                    door.GetComponent<Door>().IsOpening = true;
+                    room.Finished = true;
+                }
+                else
+                {
+                    // TODO: open door to last room
+                }
+            }
+        }
+    }
 
     private void GenerateRooms()
     {
@@ -68,12 +110,33 @@ public class MapGenerator : MonoBehaviour
             {
                 GameObject prefab = Instantiate(_room, Vector3.zero, _room.transform.rotation);
                 prefab.name = "Room0";
-                Room room = new()
+
+                Room room = null;
+                switch (roomType)
                 {
-                    Prefab = prefab,
-                    RoomPosition = RoomPosition.Main,
-                    Type = roomType,
-                };
+                    case RoomType.Action:
+                        {
+                            room = new ActionRoom()
+                            {
+                                Prefab = prefab,
+                                Position = RoomPosition.Main,
+                                Type = roomType,
+                                Index = i,
+                            };
+                        }
+                        break;
+                    case RoomType.Laser:
+                        {
+                            room = new()
+                            {
+                                Prefab = prefab,
+                                Position = RoomPosition.Main,
+                                Type = roomType,
+                                Index = i,
+                            };
+                        }
+                        break;
+                }
                 _roomsList.Add(room);
             }
             else
@@ -89,12 +152,33 @@ public class MapGenerator : MonoBehaviour
                 }
                 GameObject prefab = Instantiate(_room, position, _room.transform.rotation);
                 prefab.name = "Room" + i;
-                Room room = new()
+
+                Room room = null;
+                switch (roomType)
                 {
-                    Prefab = prefab,
-                    RoomPosition = roomPosition,
-                    Type = roomType,
-                };
+                    case RoomType.Action:
+                        {
+                            room = new ActionRoom()
+                            {
+                                Prefab = prefab,
+                                Position = roomPosition,
+                                Type = roomType,
+                                Index = i,
+                            };
+                        }
+                        break;
+                    case RoomType.Laser:
+                        {
+                            room = new()
+                            {
+                                Prefab = prefab,
+                                Position = roomPosition,
+                                Type = roomType,
+                                Index = i,
+                            };
+                        }
+                        break;
+                }
                 _roomsList.Add(room);
             }
 
@@ -133,13 +217,14 @@ public class MapGenerator : MonoBehaviour
             Room currentRoom = _roomsList[i];
             Room previousRoom = _roomsList[i - 1];
 
-            switch (currentRoom.RoomPosition)
+            switch (currentRoom.Position)
             {
                 case RoomPosition.Top:
                     Transform wall = _roomsList[i].Prefab.transform.Find("Bottom Wall");
                     Vector3 position = new(wall.transform.position.x + 9, 8.0f, wall.transform.position.z);
                     GameObject doorWall = Instantiate(_door, position, _door.transform.rotation);
                     doorWall.transform.parent = _roomsList[i].Prefab.transform;
+                    doorWall.GetComponent<Door>().Room = currentRoom;
 
                     RemoveWallByName(currentRoom.Prefab, "Bottom Wall");
                     RemoveWallByName(previousRoom.Prefab, "Top Wall");
@@ -149,6 +234,7 @@ public class MapGenerator : MonoBehaviour
                     position = new(wall.transform.position.x + 9, 8.0f, wall.transform.position.z);
                     doorWall = Instantiate(_door, position, _door.transform.rotation);
                     doorWall.transform.parent = _roomsList[i].Prefab.transform;
+                    doorWall.GetComponent<Door>().Room = currentRoom;
 
                     RemoveWallByName(currentRoom.Prefab, "Top Wall");
                     RemoveWallByName(previousRoom.Prefab, "Bottom Wall");
@@ -158,6 +244,7 @@ public class MapGenerator : MonoBehaviour
                     position = new(wall.transform.position.x, 8.0f, wall.transform.position.z - 9);
                     doorWall = Instantiate(_door, position, Quaternion.Euler(0.0f, 90.0f, 0.0f));
                     doorWall.transform.parent = _roomsList[i].Prefab.transform;
+                    doorWall.GetComponent<Door>().Room = currentRoom;
 
                     RemoveWallByName(currentRoom.Prefab, "Right Wall");
                     RemoveWallByName(previousRoom.Prefab, "Left Wall");
@@ -167,6 +254,7 @@ public class MapGenerator : MonoBehaviour
                     position = new(wall.transform.position.x, 8.0f, wall.transform.position.z - 9);
                     doorWall = Instantiate(_door, position, Quaternion.Euler(0.0f, 90.0f, 0.0f));
                     doorWall.transform.parent = _roomsList[i].Prefab.transform;
+                    doorWall.GetComponent<Door>().Room = currentRoom;
 
                     RemoveWallByName(currentRoom.Prefab, "Left Wall");
                     RemoveWallByName(previousRoom.Prefab, "Right Wall");
@@ -188,20 +276,15 @@ public class MapGenerator : MonoBehaviour
     {
         foreach (Room room in _roomsList)
         {
-            PopulateRoom(room);
-        }
-    }
-
-    private void PopulateRoom(Room room)
-    {
-        switch (room.Type)
-        {
-            case RoomType.Laser:
-                GenerateLaserRoom(room);
-                break;
-            case RoomType.Action:
-                PopulateActionRoom(room);
-                break;
+            switch (room.Type)
+            {
+                case RoomType.Laser:
+                    GenerateLaserRoom(room);
+                    break;
+                case RoomType.Action:
+                    PopulateActionRoom((ActionRoom)room);
+                    break;
+            }
         }
     }
 
@@ -219,11 +302,9 @@ public class MapGenerator : MonoBehaviour
     [SerializeField] private GameObject _barrel;
     [SerializeField] private GameObject _concreteSlab;
 
-    private void PopulateActionRoom(Room room)
+    private void PopulateActionRoom(ActionRoom room)
     {
         ActionObstacleType[] obstacles = new ActionObstacleType[15 * 15];
-
-        Debug.Log(room.Prefab.transform.position);
 
         for (int x = 0; x < 15; x++)
         {
@@ -237,12 +318,15 @@ public class MapGenerator : MonoBehaviour
                     continue;
                 }
 
-                int obstacleType = Random.Range(0, 7);
-                if (obstacleType < 2)
+                int obstacleType = Random.Range(0, 8);
+                if (obstacleType == 0)
+                {
+                    obstacles[x + y * 15] = ActionObstacleType.FlyingEnemy;
+                } else if (obstacleType < 3)
                 {
                     obstacles[x + y * 15] = ActionObstacleType.ExplosiveBarrel;
                 }
-                else if (obstacleType < 4)
+                else if (obstacleType < 5)
                 {
                     obstacles[x + y * 15] = ActionObstacleType.Crates;
                 }
@@ -264,6 +348,14 @@ public class MapGenerator : MonoBehaviour
                     case ActionObstacleType.Empty:
                         break;
                     case ActionObstacleType.FlyingEnemy:
+                        {
+                            Vector2 randomness = new(Random.Range(-0.1f, 0.1f), Random.Range(-0.1f, 0.1f));
+                            float angle = Random.Range(-180.0f, 180.0f);
+                            GameObject enemy = Instantiate(_flyingEnemy, room.Prefab.transform.position + new Vector3(x * 2.0f + 1.0f + randomness.x - _roomLength / 2.0f, 2.1f, y * 2.0f + 1.0f + randomness.y - _roomLength / 2.0f), Quaternion.Euler(0.0f, angle, 0.0f));
+                            enemy.GetComponent<FlyingDrone>().Target = _player.transform;
+
+                            room.Enemies.Add(enemy);
+                        }
                         break;
                     case ActionObstacleType.Crates:
                         {

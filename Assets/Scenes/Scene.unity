@@ -404,6 +404,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &854015865 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2559815757044005026, guid: b56087d37ee1b4608a20409dff70096f, type: 3}
+  m_PrefabInstance: {fileID: 663106533}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8327f5a292f2c47feb767d33f8045c56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1206617597
 GameObject:
   m_ObjectHideFlags: 0
@@ -438,8 +449,9 @@ MonoBehaviour:
   _laser: {fileID: 7285146088290920482, guid: d68f97b282ae74ee987638b6a1ad7ba4, type: 3}
   _laserRoomCollectible: {fileID: 7899234328208242204, guid: ed8e6286572b8495d91d9a04be75b67c, type: 3}
   _forceRoomType: 1
-  _forcedRoomType: 0
+  _forcedRoomType: 1
   _laserNumber: 6
+  _player: {fileID: 854015865}
   _flyingEnemy: {fileID: 8677084160021264216, guid: 125793a488205a061aa7992b5a4349e5, type: 3}
   _crates: {fileID: 1070010812685910317, guid: 0af6b1cc4960047f8989a807d1152bae, type: 3}
   _barrel: {fileID: 4012906592762768337, guid: a0de6992bbb83f1f7b6cc4bb41921176, type: 3}

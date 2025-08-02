@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _explosionShakeTime = 0.2f;
     [SerializeField] private AnimationCurve _explosionShakeCurve;
     [SerializeField] private int _enemyToSpawn;
+    [SerializeField] private MapGenerator _map;
 
     private Rigidbody _rb;
     private Vector2 _input;
@@ -182,6 +183,12 @@ public class PlayerController : MonoBehaviour
         else if (other.CompareTag("Laser"))
         {
             SpawnEnemy(other.GetComponent<Laser>().Room);
+        }
+        else if (other.TryGetComponent(out Door door))
+        {
+            door.IsOpening = false;
+            door.IsClosing = true;
+            _map.CurrentRoom = door.Room;
         }
     }
 
