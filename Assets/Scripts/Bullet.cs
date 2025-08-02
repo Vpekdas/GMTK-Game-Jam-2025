@@ -13,7 +13,7 @@ public class Bullet : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if ( collision.collider.TryGetComponent(out Mortal mortal))
+        if (collision.collider.TryGetComponent(out Mortal mortal))
         {
             mortal.Damage(20.0f);
         }
@@ -24,6 +24,7 @@ public class Bullet : MonoBehaviour
         else if (collision.collider.TryGetComponent(out PlayerController player))
         {
             player.Kill();
+            player.IsDead = true;
         }
 
         Destroy(gameObject);

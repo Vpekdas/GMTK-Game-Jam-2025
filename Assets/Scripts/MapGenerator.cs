@@ -11,7 +11,6 @@ public class MapGenerator : MonoBehaviour
         Right,
         Bottom,
         Left,
-        Main,
     }
 
     public enum RoomType
@@ -19,6 +18,7 @@ public class MapGenerator : MonoBehaviour
         Laser,
         Action,
         Main,
+        End,
     }
 
     public class Room
@@ -46,10 +46,10 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
-    [SerializeField] private GameObject _room, _door, _laser, _laserRoomCollectible;
+    [SerializeField] private GameObject _room, _door, _laser, _laserRoomCollectible, _mainRoom, _endRoom;
     [SerializeField] private bool _forceRoomType = false;
     [SerializeField] private RoomType _forcedRoomType = RoomType.Laser;
-    [SerializeField] private int _laserNumber;
+    [SerializeField] private int _laserNumber, _roomNumber;
     [SerializeField] private PlayerController _player;
     private List<Room> _roomsList;
     private readonly int _roomLength = 30, _wallHeight = 16;
@@ -73,8 +73,10 @@ public class MapGenerator : MonoBehaviour
 
     private void Update()
     {
+
         if (CurrentRoom is ActionRoom room && !room.Finished)
         {
+
             if (room.AllEnemyAreDead())
             {
                 if (room.Index < 5)
@@ -95,7 +97,7 @@ public class MapGenerator : MonoBehaviour
     {
         RoomType previousRoom = RoomType.Laser;
 
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < _roomNumber; i++)
         {
             List<RoomType> roomTypes = new() { RoomType.Laser, RoomType.Action };
 
@@ -108,35 +110,38 @@ public class MapGenerator : MonoBehaviour
 
             if (i == 0)
             {
-                GameObject prefab = Instantiate(_room, Vector3.zero, _room.transform.rotation);
-                prefab.name = "Room0";
+                GameObject prefab = Instantiate(_mainRoom, Vector3.zero, _mainRoom.transform.rotation);
+                prefab.name = "Room" + i;
 
-                Room room = null;
-                switch (roomType)
+                Room room = new()
                 {
-                    case RoomType.Action:
-                        {
-                            room = new ActionRoom()
-                            {
-                                Prefab = prefab,
-                                Position = RoomPosition.Main,
-                                Type = roomType,
-                                Index = i,
-                            };
-                        }
-                        break;
-                    case RoomType.Laser:
-                        {
-                            room = new()
-                            {
-                                Prefab = prefab,
-                                Position = RoomPosition.Main,
-                                Type = roomType,
-                                Index = i,
-                            };
-                        }
-                        break;
+                    Prefab = prefab,
+                    Position = RoomPosition.Top,
+                    Type = RoomType.Main,
+                    Index = i,
+                };
+                _roomsList.Add(room);
+            }
+            else if (i == _roomNumber - 1)
+            {
+                RoomPosition roomPosition = (RoomPosition)Random.Range(0, 4);
+                Vector3 previousPosition = _roomsList[i - 1].Prefab.transform.position;
+                Vector3 position = GenerateRoomPosition(roomPosition, previousPosition);
+
+                while (IsPositionDouble(position))
+                {
+                    roomPosition = (RoomPosition)Random.Range(0, 3);
+                    position = GenerateRoomPosition(roomPosition, previousPosition);
                 }
+                GameObject prefab = Instantiate(_endRoom, position, _endRoom.transform.rotation);
+                prefab.name = "Room" + i;
+                Room room = new()
+                {
+                    Prefab = prefab,
+                    Position = roomPosition,
+                    Type = RoomType.End,
+                    Index = i,
+                };
                 _roomsList.Add(room);
             }
             else
@@ -322,7 +327,8 @@ public class MapGenerator : MonoBehaviour
                 if (obstacleType == 0)
                 {
                     obstacles[x + y * 15] = ActionObstacleType.FlyingEnemy;
-                } else if (obstacleType < 3)
+                }
+                else if (obstacleType < 3)
                 {
                     obstacles[x + y * 15] = ActionObstacleType.ExplosiveBarrel;
                 }
@@ -401,4 +407,6 @@ public class MapGenerator : MonoBehaviour
         collectiblePosition.y = 1.8f;
         collectible.transform.localPosition = collectiblePosition;
     }
+
+
 }

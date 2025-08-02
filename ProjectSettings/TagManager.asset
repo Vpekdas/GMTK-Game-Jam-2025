@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 3
   tags:
   - Collectible
+  - Laser
+  - Ground
+  - Portal
   layers:
   - Default
   - TransparentFX
