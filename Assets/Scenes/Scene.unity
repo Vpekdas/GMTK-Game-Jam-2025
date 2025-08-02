@@ -253,9 +253,17 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 2559815757044005026, guid: b56087d37ee1b4608a20409dff70096f, type: 3}
+      propertyPath: _map
+      value: 
+      objectReference: {fileID: 1206617598}
+    - target: {fileID: 2559815757044005026, guid: b56087d37ee1b4608a20409dff70096f, type: 3}
       propertyPath: _enemy
       value: 
       objectReference: {fileID: 8677084160021264216, guid: 125793a488205a061aa7992b5a4349e5, type: 3}
+    - target: {fileID: 2559815757044005026, guid: b56087d37ee1b4608a20409dff70096f, type: 3}
+      propertyPath: _gameManager
+      value: 
+      objectReference: {fileID: 715702961}
     - target: {fileID: 2559815757044005026, guid: b56087d37ee1b4608a20409dff70096f, type: 3}
       propertyPath: _enemyToSpawn
       value: 1
@@ -451,8 +459,9 @@ MonoBehaviour:
   _mainRoom: {fileID: 606124408765798331, guid: fe40c0f33b5ff4b6bbe47b38d63010e2, type: 3}
   _endRoom: {fileID: 606124408765798331, guid: 45803ad40a0a24861b6389f4b519e53a, type: 3}
   _forceRoomType: 1
-  _forcedRoomType: 0
+  _forcedRoomType: 1
   _laserNumber: 6
+  _roomNumber: 0
   _player: {fileID: 854015865}
   _flyingEnemy: {fileID: 8677084160021264216, guid: 125793a488205a061aa7992b5a4349e5, type: 3}
   _crates: {fileID: 1070010812685910317, guid: 0af6b1cc4960047f8989a807d1152bae, type: 3}

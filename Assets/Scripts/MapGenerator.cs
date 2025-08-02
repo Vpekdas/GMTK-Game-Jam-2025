@@ -49,7 +49,7 @@ public class MapGenerator : MonoBehaviour
     [SerializeField] private GameObject _room, _door, _laser, _laserRoomCollectible, _mainRoom, _endRoom;
     [SerializeField] private bool _forceRoomType = false;
     [SerializeField] private RoomType _forcedRoomType = RoomType.Laser;
-    [SerializeField] private int _laserNumber;
+    [SerializeField] private int _laserNumber, _roomNumber;
     [SerializeField] private PlayerController _player;
     private List<Room> _roomsList;
     private readonly int _roomLength = 30, _wallHeight = 16;
@@ -73,8 +73,10 @@ public class MapGenerator : MonoBehaviour
 
     private void Update()
     {
+
         if (CurrentRoom is ActionRoom room && !room.Finished)
         {
+
             if (room.AllEnemyAreDead())
             {
                 if (room.Index < 5)
@@ -95,7 +97,7 @@ public class MapGenerator : MonoBehaviour
     {
         RoomType previousRoom = RoomType.Laser;
 
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < _roomNumber; i++)
         {
             List<RoomType> roomTypes = new() { RoomType.Laser, RoomType.Action };
 
@@ -120,7 +122,7 @@ public class MapGenerator : MonoBehaviour
                 };
                 _roomsList.Add(room);
             }
-            else if (i == 5)
+            else if (i == _roomNumber - 1)
             {
                 RoomPosition roomPosition = (RoomPosition)Random.Range(0, 4);
                 Vector3 previousPosition = _roomsList[i - 1].Prefab.transform.position;

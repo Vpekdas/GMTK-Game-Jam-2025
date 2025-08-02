@@ -35,7 +35,8 @@ public class Door : MonoBehaviour
                 _door.transform.position = pos;
                 _isOpening = false;
             }
-        } else if (_isClosing && _door.transform.position.y > 0.0)
+        }
+        else if (_isClosing && _door.transform.position.y > 0.0)
         {
             _door.transform.position += _speed * Time.deltaTime * Vector3.down;
             _isOpening = false;
