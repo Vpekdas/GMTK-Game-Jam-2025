@@ -5,7 +5,8 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] float _timer;
-    [SerializeField] TextMeshProUGUI _timerText;
+    [SerializeField] private TextMeshProUGUI _timerText;
+    [SerializeField] private GameObject _transition;
     private bool _isGameActive;
 
     public bool IsGameActive { get => _isGameActive; set => _isGameActive = value; }
@@ -29,5 +30,6 @@ public class GameManager : MonoBehaviour
             _timerText.text = "Time before portal closes: " + _timer;
             yield return new WaitForSeconds(1.0f);
         }
+        _transition.SetActive(true);
     }
 }
