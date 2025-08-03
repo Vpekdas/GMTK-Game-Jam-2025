@@ -135,6 +135,13 @@ public class MapGenerator : MonoBehaviour
                     Type = RoomType.End,
                     Index = i,
                 };
+                if (roomPosition == RoomPosition.Right || roomPosition == RoomPosition.Left)
+                {
+                    Transform portalTransform = prefab.transform.Find("Portal").transform;
+                    Vector3 currentRotation = portalTransform.localEulerAngles;
+                    currentRotation.y = 90f;
+                    portalTransform.localEulerAngles = currentRotation;
+                }
                 _roomsList.Add(room);
             }
             else
