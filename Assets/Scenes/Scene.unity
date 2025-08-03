@@ -699,7 +699,7 @@ MonoBehaviour:
   _forceRoomType: 1
   _forcedRoomType: 1
   _laserNumber: 6
-  _roomNumber: 10
+  _roomNumber: 4
   _player: {fileID: 854015865}
   _flyingEnemy: {fileID: 8677084160021264216, guid: 125793a488205a061aa7992b5a4349e5, type: 3}
   _crates: {fileID: 1070010812685910317, guid: 0af6b1cc4960047f8989a807d1152bae, type: 3}

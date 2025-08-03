@@ -188,6 +188,13 @@ public class PlayerController : MonoBehaviour
         _isGrounded = false;
     }
 
+    public void Restart(InputAction.CallbackContext context)
+    {
+        if (!context.performed)
+            return;
+        Kill();
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         // For Laser Room
