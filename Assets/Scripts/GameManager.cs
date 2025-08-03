@@ -7,13 +7,14 @@ public class GameManager : MonoBehaviour
     [SerializeField] float _timer;
     [SerializeField] private TextMeshProUGUI _timerText;
     [SerializeField] private GameObject _transition;
-    private bool _isGameActive;
+    private bool _isGameActive, _isGameFinished;
 
     public bool IsGameActive { get => _isGameActive; set => _isGameActive = value; }
 
     private void Awake()
     {
         _isGameActive = true;
+        _isGameFinished = false;
     }
 
     private void Start()
