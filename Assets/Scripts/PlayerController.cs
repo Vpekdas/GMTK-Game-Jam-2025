@@ -227,7 +227,6 @@ public class PlayerController : MonoBehaviour
         else if (other.CompareTag("Portal"))
         {
             _endTransition.SetActive(true);
-            Destroy(other.gameObject);
         }
     }
 
