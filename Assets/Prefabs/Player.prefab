@@ -509,12 +509,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8327f5a292f2c47feb767d33f8045c56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 12
+  _speed: 17
   _lookSpeedH: 3
   _lookSpeedV: 3
   _camera: {fileID: 1985986365966189070}
   _head: {fileID: 3595685211188598032}
   _bullet: {fileID: 4102010980870858141, guid: 8c92ac22d197ea9fa99189a0ff28fb52, type: 3}
+  _enemy: {fileID: 8677084160021264216, guid: 125793a488205a061aa7992b5a4349e5, type: 3}
   _pistol: {fileID: 8120266740745394409}
   _explosionShakeTime: 0.2
   _explosionShakeCurve:
@@ -550,6 +551,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  _enemyToSpawn: 0
+  _map: {fileID: 0}
 --- !u!1001 &8591252831769542402
 PrefabInstance:
   m_ObjectHideFlags: 0

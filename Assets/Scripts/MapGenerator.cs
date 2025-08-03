@@ -306,6 +306,8 @@ public class MapGenerator : MonoBehaviour
     [SerializeField] private GameObject _crates;
     [SerializeField] private GameObject _barrel;
     [SerializeField] private GameObject _concreteSlab;
+    [SerializeField] private int _minEnemyCount = 2;
+    [SerializeField] private int _maxEnemyCount = 5;
 
     private void PopulateActionRoom(ActionRoom room)
     {
@@ -323,22 +325,39 @@ public class MapGenerator : MonoBehaviour
                     continue;
                 }
 
-                int obstacleType = Random.Range(0, 8);
-                if (obstacleType == 0)
-                {
-                    obstacles[x + y * 15] = ActionObstacleType.FlyingEnemy;
-                }
-                else if (obstacleType < 3)
+                int obstacleType = Random.Range(0, 7);
+                if (obstacleType < 2)
                 {
                     obstacles[x + y * 15] = ActionObstacleType.ExplosiveBarrel;
                 }
-                else if (obstacleType < 5)
+                else if (obstacleType < 4)
                 {
                     obstacles[x + y * 15] = ActionObstacleType.Crates;
                 }
                 else
                 {
                     obstacles[x + y * 15] = ActionObstacleType.ConcreteSlab;
+                }
+            }
+        }
+
+        int enemyCount = Random.Range(_minEnemyCount, _maxEnemyCount + 1);
+
+        for (int i = 0; i < enemyCount; i++)
+        {
+            while (true)
+            {
+                int x = Random.Range(0, 15);
+                int y = Random.Range(0, 15);
+
+                if (obstacles[x + y * 15] != ActionObstacleType.Empty)
+                {
+                    continue;
+                }
+                else
+                {
+                    obstacles[x + y * 15] = ActionObstacleType.FlyingEnemy;
+                    break;
                 }
             }
         }
