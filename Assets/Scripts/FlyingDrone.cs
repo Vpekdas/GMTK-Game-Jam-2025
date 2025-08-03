@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class FlyingDrone : MonoBehaviour
 {
-    [SerializeField] private float _cooldownTime = 0.5f;
+    [SerializeField] private float _cooldownTime, _detectionRange;
     [SerializeField] private GameObject _bullet;
     [SerializeField] private ParticleSystem _particleSystem;
     private Rigidbody _rb;
@@ -46,7 +46,7 @@ public class FlyingDrone : MonoBehaviour
     {
         _time += Time.fixedDeltaTime;
 
-        if (!_mortal.IsDead() && _time - _lastBulletTime >= _cooldownTime && CanSeeTarget(_target, 60.0f, 10.0f))
+        if (!_mortal.IsDead() && _time - _lastBulletTime >= _cooldownTime && CanSeeTarget(_target, 60.0f, _detectionRange))
         {
             GameObject bullet = Instantiate(_bullet, transform.position + transform.forward * 0.4f, Quaternion.identity);
             Rigidbody rb = bullet.GetComponent<Rigidbody>();

@@ -53,6 +53,10 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         _time += Time.deltaTime;
+        if (transform.position.y <= -50)
+        {
+            Kill();
+        }
     }
 
     private void FixedUpdate()

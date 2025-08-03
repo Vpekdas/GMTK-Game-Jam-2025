@@ -504,7 +504,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a014364cdf967412aa4faa72aff65e72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _timer: 60
+  _timer: 120
   _timerText: {fileID: 2076887043}
   _transition: {fileID: 2069767014}
 --- !u!4 &715702962

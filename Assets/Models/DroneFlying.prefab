@@ -398,7 +398,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b394e3b819458ec758043e59676d55d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _cooldownTime: 0.5
+  _cooldownTime: 2.5
+  _detectionRange: 40
   _bullet: {fileID: 4102010980870858141, guid: 8c92ac22d197ea9fa99189a0ff28fb52, type: 3}
   _particleSystem: {fileID: 6399766536985768347}
 --- !u!82 &8925240878407643376
