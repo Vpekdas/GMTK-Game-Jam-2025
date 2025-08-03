@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        _isGameActive = true;
+        _isGameActive = false;
         _isGameFinished = false;
     }
 
@@ -25,6 +25,10 @@ public class GameManager : MonoBehaviour
 
     IEnumerator TimerRoutine()
     {
+        while (!_isGameActive)
+        {
+            yield return null;
+        }
         while (_timer > 0 && _isGameActive)
         {
             _timer--;

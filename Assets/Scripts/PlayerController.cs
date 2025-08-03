@@ -204,6 +204,7 @@ public class PlayerController : MonoBehaviour
             {
                 _pistol.gameObject.SetActive(true);
                 _isHoldingPistol = true;
+                _gameManager.IsGameActive = true;
             }
             Transform room = other.gameObject.transform.parent.transform.parent;
             char roomNumber = room.name[^1];
