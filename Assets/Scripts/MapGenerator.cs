@@ -79,16 +79,9 @@ public class MapGenerator : MonoBehaviour
 
             if (room.AllEnemyAreDead())
             {
-                if (room.Index < 5)
-                {
-                    Transform door = _roomsList[room.Index + 1].Prefab.transform.Find("Door Wall(Clone)");
-                    door.GetComponent<Door>().IsOpening = true;
-                    room.Finished = true;
-                }
-                else
-                {
-                    // TODO: open door to last room
-                }
+                Transform door = _roomsList[room.Index + 1].Prefab.transform.Find("Door Wall(Clone)");
+                door.GetComponent<Door>().IsOpening = true;
+                room.Finished = true;
             }
         }
     }
@@ -307,7 +300,7 @@ public class MapGenerator : MonoBehaviour
     [SerializeField] private GameObject _barrel;
     [SerializeField] private GameObject _concreteSlab;
     [SerializeField] private int _minEnemyCount = 2;
-    [SerializeField] private int _maxEnemyCount = 5;
+    [SerializeField] private int _maxEnemyCount = 3;
 
     private void PopulateActionRoom(ActionRoom room)
     {
